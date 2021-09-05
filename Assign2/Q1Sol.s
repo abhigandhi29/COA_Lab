@@ -1,3 +1,12 @@
+####################################
+####        Assgn 02            ####
+####       Question 03          ####
+#  Autumn Semester-Session 2021-22 #
+####        Group 02            ####
+##  19CS10031 - Abhishek Gandhi   ##
+##  19CS10051 - Sajal Chhamunya   ##
+####################################
+
 # This program computes and displays the sum of integers from 1 up to n,
 # where n is entered by the user.
 #

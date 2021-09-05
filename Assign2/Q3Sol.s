@@ -1,12 +1,25 @@
+####################################
+####        Assgn 02            ####
+####       Question 03          ####
+#  Autumn Semester-Session 2021-22 #
+####        Group 02            ####
+##  19CS10031 - Abhishek Gandhi   ##
+##  19CS10051 - Sajal Chhamunya   ##
+####################################
+
+# This program determines whether a number is Prime or Composite,
+# where the number is entered by the user.
+
 .data
 
 # output strings
-input_msg:      .asciiz "Enter  a  positive integer greater than equals to 10: "
+input_msg:      .asciiz "Enter a positive integer greater than equals to 10: "
 output_msg_t:   .asciiz "Entered number is a PRIME number."
 output_msg_f:   .asciiz "Entered number is a COMPOSITE number."
-error_msg:      .asciiz "Invalid Input, Input must be greater than 10."
+error_msg:      .asciiz "Invalid Input."
 newline:        .asciiz "\n"
 
+#Defining the loading codes for different operations
 READ_INT_CODE:       .word 5
 PRINT_INT_CODE:      .word 1
 PRINT_STRING_CODE:   .word 4
@@ -19,20 +32,21 @@ main:
     la $a0, input_msg
     lw $v0, PRINT_STRING_CODE
     syscall
+    # Taking input for the number
     lw $v0, READ_INT_CODE
     syscall
     move $s0, $v0
 
-    # invalid inputs
+    # Checking for invalid inputs
     blt $s0, 10, invalid_
 
-    # loop control variable i
+    # Initialising the loop control variable i
     li $t1, 1
 
 for_loop:
     # i = i+1
     add $t1, $t1, 1 # if i*i >n, exit
-    mul $t2, $t1, $t1 #
+    mul $t2, $t1, $t1 
     bgt $t2, $s0, exit_t
 
     # gcd b/w i and n
