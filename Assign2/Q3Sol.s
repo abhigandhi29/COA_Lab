@@ -1,9 +1,9 @@
 .data
 
 # output strings
-input_msg:      .asciiz "Enter  a  positiveinteger greater than equals to 10: "
-output_msg_t:   .asciiz "Entered number is a prime number."
-output_msg_f:   .asciiz "Entered number is a Composite number."
+input_msg:      .asciiz "Enter  a  positive integer greater than equals to 10: "
+output_msg_t:   .asciiz "Entered number is a PRIME number."
+output_msg_f:   .asciiz "Entered number is a COMPOSITE number."
 error_msg:      .asciiz "Invalid Input, Input must be greater than 10."
 newline:        .asciiz "\n"
 

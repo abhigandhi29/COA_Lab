@@ -22,7 +22,7 @@ main:
     syscall
     lw $v0, READ_INT_CODE
     syscall
-    move $s0, $v0
+    move $s0, $v0   #storing a in $s0
 
     # Reading second no. n2
     la $a0, input_msg_2
@@ -30,14 +30,14 @@ main:
     syscall
     lw $v0, READ_INT_CODE
     syscall
-    move $s1, $v0
+    move $s1, $v0   #storing b in $s1
 
     # invalid inputs
-    blt $s0, 1, invalid_
-    blt $s1, 1, invalid_
+    blt $s0, 0, invalid_
+    blt $s1, 0, invalid_
 
     bne $s0, $0, while_loop
-    move $s0, $s1
+    move $s0, $s1   #executes if a==0, makes answer = b
     j end_loop
     # while(n1 != n2)
 while_loop:
