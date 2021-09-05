@@ -2,7 +2,7 @@
 ####        Assgn 02            ####
 ####       Question 03          ####
 #  Autumn Semester-Session 2021-22 #
-####        Group 02            ####
+####        Group 22            ####
 ##  19CS10031 - Abhishek Gandhi   ##
 ##  19CS10051 - Sajal Chhamunya   ##
 ####################################
