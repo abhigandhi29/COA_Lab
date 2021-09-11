@@ -1,8 +1,15 @@
-/*
-    Group 2
-    19CS10031 - Abhishek Gandhi
-    19CS10051 - Sajal Chammuniya
-*/
+####################################
+####        Assgn 02            ####
+####       Question 04          ####
+#  Autumn Semester-Session 2021-22 #
+####        Group 22            ####
+##  19CS10031 - Abhishek Gandhi   ##
+##  19CS10051 - Sajal Chhamunya   ##
+####################################
+
+# This program determines whether a number is a perfect number,
+# where a perfect number is defined as the number which is equal to the sum of its proper divisors
+# and the number is entered by the user.
 
 .data
 
@@ -12,6 +19,7 @@ output_msg_t:       .asciiz "Entered number is a perfect number. "
 output_msg_f:       .asciiz "Entered number is not a perfect number. "
 newline:            .asciiz "\n"
 
+#Defining the loading codes for different operations
 READ_INT_CODE:       .word 5
 PRINT_INT_CODE:      .word 1
 PRINT_STRING_CODE:   .word 4
@@ -21,19 +29,20 @@ EXIT_CODE:           .word 10
 .globl main
 
 main: 
-    # reading number of n
+    # Reading number of n
     la $a0, input_msg
     lw $v0, PRINT_STRING_CODE
     syscall
+    # Taking input of the number
     lw $v0, READ_INT_CODE
     syscall
     move $s0, $v0
     
-    # imput must be >0 otherwise invlid
+    # imput must be >0 otherwise invalid
     blt $s0, 1, invalid_
 
-    li $t0, 2 # for loop counter variable (i=2)
-    li $s1, 1 # sum is stored in $s1
+    li $t0, 2 # Initialising for loop counter variable (i=2)
+    li $s1, 1 # Initialising the variable sum
 
 for_loop:
     mul $t1, $t0, $t0   # $t1 = i*i, we need to run the loop till sqrt(n)
