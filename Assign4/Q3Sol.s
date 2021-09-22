@@ -1,6 +1,6 @@
 ####################################
 ####        Assgn 04            ####
-####       Question 02          ####
+####       Question 03          ####
 #  Autumn Semester-Session 2021-22 #
 ####        Group 22            ####
 ##  19CS10031 - Abhishek Gandhi   ##
@@ -75,52 +75,53 @@ main:
     la $a0, array       # setting up parameters for print array function
     jal printArray      # printing array
 
-    la $a0, key_msg    # printing sort message
+    la $a0, key_msg     # printing key input message
     lw $v0, PRINT_STRING_CODE
     syscall
 
-    lw $v0, READ_INT_CODE
+    lw $v0, READ_INT_CODE   # taking key as input
     syscall
-    move $a3, $v0
-    la $a0, array
-    li $a1, 0
-    li $a2, 9
-    jal recursive_search
+    # setting up parameters for recursive search
+    move $a3, $v0           # moving ket to a3
+    la $a0, array           # moving array address to a0
+    li $a1, 0               # storing left in a1
+    li $a2, 9               # storing right in a2
+    jal recursive_search    # calling recursive search
 
-    move $s0, $v0
+    move $s0, $v0           # store output in s0
 
-    blt $v0, $0, error_state  
-    j found
+    blt $s0, $0, error_state # if output is -1 i.e s0 < 0, not found  
+    j found                  # else found
     
     error_state:
-        lw $v0, PRINT_INT_CODE
+        lw $v0, PRINT_INT_CODE         # print input key
         move $a0, $a3
         syscall
 
-        lw $v0, PRINT_STRING_CODE
+        lw $v0, PRINT_STRING_CODE      # print not found string
         la $a0, not_found_msg
         syscall
 
-        lw $v0, PRINT_STRING_CODE
+        lw $v0, PRINT_STRING_CODE      # print newline
         la $a0, newline
         syscall
 
         j exit_code
 
     found:
-        lw $v0, PRINT_INT_CODE
+        lw $v0, PRINT_INT_CODE           # print input key
         move $a0, $a3
         syscall
 
-        lw $v0, PRINT_STRING_CODE
+        lw $v0, PRINT_STRING_CODE       # print found msg
         la $a0, found_msg
         syscall
 
-        lw $v0, PRINT_INT_CODE
+        lw $v0, PRINT_INT_CODE              # print index at which key is present 
         move $a0, $s0
         syscall
 
-        lw $v0, PRINT_STRING_CODE
+        lw $v0, PRINT_STRING_CODE                # print newline
         la $a0, newline
         syscall
 
@@ -130,69 +131,69 @@ main:
 
 
 recursive_search:
-    move $t0, $ra
-    jal initStack
-    move $s0, $a0
-    move $a0, $t0
+    move $t0, $ra          # storing return pointer in t0
+    jal initStack          # calling initStack function for initalizing frame
+    move $t1, $a0          # storing array address in t1
+    move $a0, $t0          # storing ra in stack
     jal pushToStack
-    move $a0, $a1
+    move $a0, $a1          # storing start in stack
     jal pushToStack
-    move $a0, $a2
+    move $a0, $a2          # storing end in stack
     jal pushToStack
-    move $a0, $s0
+    move $a0, $t1          # storing address in array in a0
 
     while_loop_search:
-        bgt $a1, $a2, not_found
-        sub $t0, $a2, $a1
-        li $t1, 3
-        div $t0, $t1
-        mflo $t0
-        add $t1, $a1, $t0
-        sub $t2, $a2, $t0 
-        sll $t3, $t1, 2
-        add $t3, $a0, $t3
-        lw $t5, 0($t3)
-        beq $t5, $a3, found_mid1
-        sll $t4, $t2, 2
-        add $t4, $a0, $t4
-        lw $t6, 0($t4)
-        beq $t6, $a3, found_mid2
-        blt $a3, $t5, first_range
-        bgt $a3, $t6, last_range
-        j mid_range
+        bgt $a1, $a2, not_found    # if start>end, exit, not found
+        sub $t0, $a2, $a1          # t0->end-start
+        li $t1, 3                  # initialize t3 to 3
+        div $t0, $t1               # divide t0 by t1
+        mflo $t0                   # t1-> (end-start)/3
+        add $t1, $a1, $t0          # t1 contains mid1, t1->start+(end-start)/3
+        sub $t2, $a2, $t0          # t2 contains mid2, t2->end-(end-start)/3
+        sll $t3, $t1, 2            # multiplying t1 by 4
+        add $t3, $a0, $t3          # address of a[mid1] in t3
+        lw $t5, 0($t3)             # loading a[mid1] in t5
+        beq $t5, $a3, found_mid1   # if key == a[mid1] go to found_mid1
+        sll $t4, $t2, 2            
+        add $t4, $a0, $t4          # address of a[mid2] in t4
+        lw $t6, 0($t4)             # loading a[mid2] in t6
+        beq $t6, $a3, found_mid2   # if key == a[mid2] go to found_mid2
+        blt $a3, $t5, first_range  # if key < a[mid1] go to first_range
+        bgt $a3, $t6, last_range   # if key > a[mid2] go to last_range
+        j mid_range                # else go to mid_range
 
-        found_mid1:
+        found_mid1:                    # if key==A[mid1]
             move $v0, $t1
             j exit_search    
 
-        found_mid2:
+        found_mid2:                   # if key==A[mid2]
             move $v0, $t2
             j exit_search   
 
-        first_range:
+        first_range:                 # if key < A[mid1]
             addi $a2, $t1, -1
             jal recursive_search
             j exit_search
 
-        last_range:
+        last_range:                  # if key > A[mid2]
             addi $a1, $t2, 1
             jal recursive_search
             j exit_search
 
-        mid_range:
+        mid_range:                   # else case
             addi $a1, $t1, 1
             addi $a2, $t2, -1
             jal recursive_search
             j exit_search
 
-        not_found:
+        not_found:                   # if not_found
             li $v0, -1   
 
     exit_search:
-        move $sp, $fp
-        lw $ra, -4($fp)
-        lw $fp, 0($fp)
-        addi $sp, $sp, 4
+        move $sp, $fp                            # poping stack data
+        lw $ra, -4($fp)                          # loading ra from stack
+        lw $fp, 0($fp)                           # loading previous value of fp in fp
+        addi $sp, $sp, 4                         # poping previous frame pointer from stack
         jr $ra                                   # return to call location
 
 
